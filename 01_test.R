@@ -2,11 +2,9 @@
 ###		SETTINGS
 ############################################################################################
 
-#http://dw-swissinfo.s3-website-us-west-2.amazonaws.com/PE5if/1/
-
 source("~/swissinfo/_helpers/helpers.R")
 
-data <- read.csv("IPC_suisse_00_14.csv", header = T, row.names = 1)
+data <- read.csv("IPC_suisse_00_14_en.csv", header = T, row.names = 1)
 
 dates <- as.POSIXct(gsub("^X", "", colnames(data)), format = "%m.%d.%y")
 colnames(data) <- dates
@@ -21,7 +19,7 @@ colnames(data.r)[3] <- 'value'
 
 data <- ddply(data.r, .(biens), summarize, pc = ((value - value[1]) / value[1]) * 100, time = time)
 
-#ggplot(data = data, aes(time, pc)) + geom_line(aes(group = biens, color = biens)) + ggtheme_ygrid
+ggplot(data = data, aes(time, pc)) + geom_line(aes(group = biens, color = biens)) + theme_minimal()
 
 
 library(rCharts)
@@ -35,7 +33,7 @@ pricePlot <- nPlot(
 	type = "lineChart", height=500,width=700)
 
 pricePlot$xAxis(tickFormat="#!function(d) {return d3.time.format('%Y')(new Date( d * 86400000 ));}!#", axisLabel = "Year")
-pricePlot$yAxis(axisLabel = "Price change in %", width = 55)
+pricePlot$yAxis(axisLabel = "Price change in %")
 #pricePlot$chart(color = swi_22palette)
 #pricePlot
 
